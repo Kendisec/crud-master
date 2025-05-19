@@ -1,6 +1,6 @@
 MESSAGE = $1
 config1: 
-	cd .git && git remote add github https://github.com/Kendisec/crud_master.git
+	cd .git && git remote add github https://github.com/Kendisec/crud-master.git
 
 config2: 
 	cd .git && git remote add github1 https://github.com/Baabacar/crud_master.git
