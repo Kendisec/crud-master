@@ -1,0 +1,63 @@
+## CRUD_MASTER
+☐ crud_master : @started(25-05-20 16:13)
+# Environnement :
+    ☐ node.js
+    ☐ express.js
+    ☐ PostgreSQL
+    ☐ RabbitMQ
+    ☐ Postman
+# API 1: Inventory : 
+    ☐ Créer l'API RESTful Inventory avec Express
+    ☐ Configurer Sequelize pour PostgreSQL
+    ☐ Créer la base de données `movies`
+    ☐ Créer la table `movies` avec `id`, `title`, `description`
+    -- Implémenter les endpoints :
+        ☐ `GET /api/movies`
+        ☐ `GET /api/movies?title=[name]`
+        ☐ `POST /api/movies`
+        ☐ `DELETE /api/movies`
+        ☐ `GET /api/movies/:id`
+        ☐ `PUT /api/movies/:id`
+        ☐ `DELETE /api/movies/:id`
+    ☐ Tester l’API Inventory avec Postman
+# API 2: Billing :
+    ☐ Créer l’API Billing pour recevoir des messages RabbitMQ
+    ☐ Utiliser `amqplib` pour interfacer avec RabbitMQ
+    ☐ Créer la base de données `orders`
+    ☐ Créer la table `orders` avec `id`, `user_id`, `number_of_items`, `total_amount`
+    ☐ Parse JSON reçu de RabbitMQ et insérer dans la base `orders`
+    ☐ Gérer l’acknowledgement RabbitMQ
+    -- Tester le comportement :
+      ☐ Envoi de messages avec API Gateway
+      ☐ Vérifier traitement différé si l’API Billing est arrêtée
+# API Gateway :
+    ☐ Créer l’API Gateway Node.js
+    ☐ Utiliser `http-proxy-middleware` pour proxy vers Inventory
+    ☐ Router toutes les requêtes `/api/movies` vers Inventory API
+    ☐ Envoyer les requêtes POST `/api/billing` dans RabbitMQ (`billing_queue`)
+    ☐ Exemple : `POST /api/billing` avec JSON
+# Documentation :
+    ☐ Créer une documentation OpenAPI (SwaggerHub conseillé)
+    ☐ Ajouter une description pour chaque endpoint dans la doc
+    -- Rédiger un `README.md` avec :
+        ☐ Vue d'ensemble du projet
+        ☐ Instructions d'installation et d'exécution
+        ☐ Stack technique utilisée
+        ☐ Choix de conception
+# Vagrant :
+    -- Créer un `Vagrantfile` pour 3 VMs :
+        ☐ `gateway-vm` (API Gateway)
+        ☐ `inventory-vm` (Inventory API + DB)
+        ☐ `billing-vm` (Billing API + DB + RabbitMQ)
+    ☐ Créer un dossier `scripts/` pour automatiser l’installation sur chaque VM
+    -- S'assurer que les commandes suivantes fonctionnent :
+        ☐ `vagrant up`
+        ☐ `vagrant status`
+        ☐ `vagrant ssh <vm-name>`
+
+# PM2 : 
+    ☐ Installer PM2 sur chaque VM
+    -- Utiliser `pm2` pour démarrer, stopper, lister les services :
+        ☐ `sudo pm2 list`
+        ☐ `sudo pm2 stop <app_name>`
+        ☐ `sudo pm2 start <app_name>`
