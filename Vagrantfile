@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "ubuntu/bionic64"
+  config.vm.box = "ubuntu/focal64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -45,39 +45,39 @@ Vagrant.configure("2") do |config|
   end
   # end
 
-  config.vm.define "billing-app" do |billing_app|
-    billing_app.vm.hostname = "billing-app"
-    billing_app.vm.network "private_network", ip: SERVICES['billing-app'][:ip]
-    SERVICES['billing-app'][:ports].each do |guest_port, host_port|
-      billing_app.vm.network "forwarded_port", guest: guest_port, host: host_port
-    end
+  config.vm.define "inventory-app" do |inventory_app|
+  inventory_app.vm.hostname = "inventory-app"
+  inventory_app.vm.network "private_network", ip: SERVICES['inventory-app'][:ip]
+  
+  SERVICES['inventory-app'][:ports].each do |guest_port, host_port|
+    inventory_app.vm.network "forwarded_port", guest: guest_port, host: host_port
   end
 
-  config.vm.define "inventory-app" do |inventory_app|
-    inventory_app.vm.hostname = "inventory-app"
-    inventory_app.vm.network "private_network", ip: SERVICES['inventory-app'][:ip]
-    SERVICES['inventory-app'][:ports].each do |guest_port, host_port|
-      inventory_app.vm.network "forwarded_port", guest: guest_port, host: host_port
-    end
-    inventory_app.vm.provision "shell", inline: <<-SHELL
-    # Update and install dependencies
+  # Add shell provisioner
+  inventory_app.vm.provision "shell", inline: <<-SHELL
+    # Update system
     sudo apt-get update -y
 
-    # Install PostgreSQL
-    sudo apt-get install -y postgresql postgresql-contrib
+    # Install dependencies
+    sudo apt-get install -y curl gnupg build-essential
 
-    # Install Node.js and npm (latest LTS)
+    # Install Node.js (latest LTS)
     curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
     sudo apt-get install -y nodejs
 
     # Install PM2 globally
     sudo npm install -g pm2
 
-    # Ensure PostgreSQL is enabled and running
+    # Install PostgreSQL
+    sudo apt-get install -y postgresql postgresql-contrib
+
+    # Start PostgreSQL service and enable on boot
     sudo systemctl enable postgresql
     sudo systemctl start postgresql
   SHELL
-  end
+end
+
+
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
