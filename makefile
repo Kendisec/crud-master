@@ -10,6 +10,7 @@ push:
 
 merge:
 	git checkout $(TO) && git merge $(FROM)
+	
 
 
 
