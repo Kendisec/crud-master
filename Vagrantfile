@@ -59,6 +59,24 @@ Vagrant.configure("2") do |config|
     SERVICES['inventory-app'][:ports].each do |guest_port, host_port|
       inventory_app.vm.network "forwarded_port", guest: guest_port, host: host_port
     end
+    inventory_app.vm.provision "shell", inline: <<-SHELL
+    # Update and install dependencies
+    sudo apt-get update -y
+
+    # Install PostgreSQL
+    sudo apt-get install -y postgresql postgresql-contrib
+
+    # Install Node.js and npm (latest LTS)
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+
+    # Install PM2 globally
+    sudo npm install -g pm2
+
+    # Ensure PostgreSQL is enabled and running
+    sudo systemctl enable postgresql
+    sudo systemctl start postgresql
+  SHELL
   end
 
   # Create a forwarded port mapping which allows access to a specific port
