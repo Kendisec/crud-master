@@ -11,8 +11,18 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/api/movies', (req, res) =>{
+    const title = req.query.title;
+    if (title) {
+    db.getMoviesbyTitle(req, res);
+  } else {
     db.getMovies(req, res);
+  }
 })
+
+
+app.post('/api/movies', (req, res) =>{
+    db.createMovie(req, res);
+});
 
 app.get('/api/movies/:id', (req, res) =>{
     db.getMoviebyId(req, res);
@@ -20,6 +30,10 @@ app.get('/api/movies/:id', (req, res) =>{
 
 app.delete('/api/movies/:id', (req, res) =>{
     db.deleteMovie(req, res);
+});
+
+app.delete('/api/movies', (req, res) =>{
+    db.deleteAllMovies(req, res);
 });
 
 app.put('/api/movies/:id', (req, res) =>{

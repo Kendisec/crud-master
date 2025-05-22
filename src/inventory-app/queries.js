@@ -16,6 +16,47 @@ const getMovies = (request, response) => {
   })
 }
 
+const getMoviesbyTitle = (request, response) => {
+    const title = request.query.title
+
+
+  if (!title) {
+    return response.status(400).json({ error: 'Missing "title" query parameter' });
+  }
+    console.log('Title:', title)
+    pool.query('SELECT * FROM movies WHERE title = $1', [title], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+
+    // pool.query(query, values, (error, results) => {
+    //     if (error) {
+    //         response.status(500).json({error: error.message})
+    //         return
+    //     }
+    //     response.status(200).json(results.rows)
+    // })
+}
+
+const createMovie = (request, response) => {
+    const { title, description } = request.body
+    pool.query(
+        'INSERT INTO movies (title, description) VALUES ($1, $2) RETURNING *',
+        [title, description],
+        (error, results) => {
+            if (error) {
+                response.status(500).json({error: error.message})
+                return
+            }
+            response.status(201).json(results.rows[0])
+        }
+    )
+}
+
+
+
 const getMoviebyId = (request, response) => {
   const id = parseInt(request.params.id)
   console.log(id)
@@ -38,6 +79,17 @@ const deleteMovie = (request, response) => {
     response.status(200).send(`User deleted with ID: ${id}`)
   })
 }
+
+const deleteAllMovies = (request, response) => {
+    pool.query('DELETE FROM movies', (error, results) => {
+        if (error) {
+            response.status(500).json({error: error.message})
+            return
+        }
+        response.status(200).json({message: 'All movies deleted successfully'})
+    })
+}
+
 
 
 // must be review
@@ -63,4 +115,7 @@ module.exports = {
     getMoviebyId,
     deleteMovie,
     updateMovie,
+    getMoviesbyTitle,
+    createMovie,
+    deleteAllMovies,
 }
