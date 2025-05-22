@@ -1,6 +1,11 @@
 const express = require('express');
 const app = express();
 const db = require('./queries.js');
+
+// make the server to parse json data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.get('/health', (req, res) => {
     res.status(200).send('OK');
 });
@@ -22,5 +27,5 @@ app.put('/api/movies/:id', (req, res) =>{
 });
 
 app.listen(3000, () => {
-    console.log("listenning on 192.168.56.12")
+    console.log("listenning on localhost:3000")
 });

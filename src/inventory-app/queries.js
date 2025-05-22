@@ -7,8 +7,6 @@ const pool = new Pool({
     port: 5432,
 })
 
-
-
 const getMovies = (request, response) => {
   pool.query('SELECT * FROM movies ORDER BY id ASC', (error, results) => {
     if (error) {
@@ -44,11 +42,12 @@ const deleteMovie = (request, response) => {
 
 // must be review
 const updateMovie = (request, response) => {
+  console.log('BODY:', request.body); // Debug line
   const id = parseInt(request.params.id)
   const { title, description } = request.body
 
   pool.query(
-    'UPDATE users SET title = $1, description = $2 WHERE id = $3',
+    'UPDATE movies SET title = $1, description = $2 WHERE id = $3',
     [title, description, id],
     (error, results) => {
       if (error) {

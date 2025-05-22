@@ -16,9 +16,9 @@
         ☐ `GET /api/movies?title=[name]`
         ☐ `POST /api/movies`
         ☐ `DELETE /api/movies`
-        ☐ `GET /api/movies/:id`
-        ☐ `PUT /api/movies/:id`
-        ☐ `DELETE /api/movies/:id`
+        ✔ `GET /api/movies/:id` @done(25-05-22 10:47)
+        ✔ `PUT /api/movies/:id` @done(25-05-22 13:19)
+        ✔ `DELETE /api/movies/:id` @done(25-05-22 10:47)
     ☐ Tester l’API Inventory avec Postman
 # API 2: Billing :
     ☐ Créer l’API Billing pour recevoir des messages RabbitMQ
