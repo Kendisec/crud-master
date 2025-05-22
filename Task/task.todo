@@ -9,7 +9,7 @@
 # API 1: Inventory : 
     ☐ Créer l'API RESTful Inventory avec Express
     ☐ Configurer Sequelize pour PostgreSQL
-    ☐ Créer la base de données `movies`
+    ☐ Créer la base de données `movies_db`
     ☐ Créer la table `movies` avec `id`, `title`, `description`
     -- Implémenter les endpoints :
         ☐ `GET /api/movies`
