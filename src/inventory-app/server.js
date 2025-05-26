@@ -40,6 +40,6 @@ app.put('/api/movies/:id', (req, res) =>{
     db.updateMovie(req, res);
 });
 
-app.listen(3000, () => {
+app.listen(3001, () => {
     console.log("listenning on localhost:3000")
 });

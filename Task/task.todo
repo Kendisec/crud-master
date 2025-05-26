@@ -1,25 +1,25 @@
 ## CRUD_MASTER
 ☐ crud_master : @started(25-05-20 16:13)
 # Environnement :
-    ☐ node.js
-    ☐ express.js
-    ☐ PostgreSQL
-    ☐ RabbitMQ
-    ☐ Postman
+    ✔ node.js @done(25-05-26 11:09)
+    ✔ express.js @done(25-05-26 11:09)
+    ✔ PostgreSQL @done(25-05-26 11:09)
+    ✔ RabbitMQ @done(25-05-26 11:09)
+    ✔ Postman @done(25-05-26 11:09)
 # API 1: Inventory : 
     ☐ Créer l'API RESTful Inventory avec Express
     ☐ Configurer Sequelize pour PostgreSQL
     ☐ Créer la base de données `movies_db`
     ☐ Créer la table `movies` avec `id`, `title`, `description`
     -- Implémenter les endpoints :
-        ☐ `GET /api/movies`
-        ☐ `GET /api/movies?title=[name]`
-        ☐ `POST /api/movies`
-        ☐ `DELETE /api/movies`
+        ✔ `GET /api/movies` @done(25-05-26 11:09)
+        ✔ `GET /api/movies?title=[name]` @done(25-05-26 11:09)
+        ✔ `POST /api/movies` @done(25-05-26 11:09)
+        ✔ `DELETE /api/movies` @done(25-05-26 11:09)
         ✔ `GET /api/movies/:id` @done(25-05-22 10:47)
         ✔ `PUT /api/movies/:id` @done(25-05-22 13:19)
         ✔ `DELETE /api/movies/:id` @done(25-05-22 10:47)
-    ☐ Tester l’API Inventory avec Postman
+    ✔ Tester l’API Inventory avec Postman @done(25-05-26 11:09)
 # API 2: Billing :
     ☐ Créer l’API Billing pour recevoir des messages RabbitMQ
     ☐ Utiliser `amqplib` pour interfacer avec RabbitMQ
