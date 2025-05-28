@@ -7,6 +7,15 @@ let channel;
 
 app.use(express.json()); // ✅ Make sure JSON body is parsed
 
+const getBilling = (request, response) => {
+  pool.query('SELECT * FROM movies ORDER BY id ASC', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 async function connectRabbitMQ() {
     const connection = await amqp.connect('amqp://localhost');
     channel = await connection.createChannel();
@@ -31,6 +40,8 @@ app.post('/api/billing', async (req, res) => {
     }
 });
 
+app.get('/api/billing', getBilling);
+
 connectRabbitMQ().then(() => {
     app.listen(3000, () => {
         console.log('API Server running on http://localhost:3000');
@@ -38,3 +49,4 @@ connectRabbitMQ().then(() => {
 }).catch(err => {
     console.error('Failed to connect to RabbitMQ', err);
 });
+

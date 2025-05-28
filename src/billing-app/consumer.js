@@ -9,8 +9,6 @@ const pool = new Pool({
     port: 5432,
 })
 
-
-
 const QUEUE = "billing_queue";
 
 async function startConsumer() {

@@ -21,12 +21,12 @@
         ✔ `DELETE /api/movies/:id` @done(25-05-22 10:47)
     ✔ Tester l’API Inventory avec Postman @done(25-05-26 11:09)
 # API 2: Billing :
-    ☐ Créer l’API Billing pour recevoir des messages RabbitMQ
-    ☐ Utiliser `amqplib` pour interfacer avec RabbitMQ
-    ☐ Créer la base de données `orders`
-    ☐ Créer la table `orders` avec `id`, `user_id`, `number_of_items`, `total_amount`
-    ☐ Parse JSON reçu de RabbitMQ et insérer dans la base `orders`
-    ☐ Gérer l’acknowledgement RabbitMQ
+    ✔ Créer l’API Billing pour recevoir des messages RabbitMQ @done(25-05-28 15:20)
+    ✔ Utiliser `amqplib` pour interfacer avec RabbitMQ @done(25-05-28 15:20)
+    ✔ Créer la base de données `orders` @done(25-05-28 15:20)
+    ✔ Créer la table `orders` avec `id`, `user_id`, `number_of_items`, `total_amount` @done(25-05-28 15:20)
+    ✔ Parse JSON reçu de RabbitMQ et insérer dans la base `orders` @done(25-05-28 15:21)
+    ✔ Gérer l’acknowledgement RabbitMQ @done(25-05-28 15:21)
     -- Tester le comportement :
       ☐ Envoi de messages avec API Gateway
       ☐ Vérifier traitement différé si l’API Billing est arrêtée

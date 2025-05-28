@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const app = express();
 const db = require('./queries.js');
 
@@ -40,6 +41,8 @@ app.put('/api/movies/:id', (req, res) =>{
     db.updateMovie(req, res);
 });
 
-app.listen(3001, () => {
-    console.log("listenning on localhost:3000")
+const port = process.env.INVENTORY_PORT;
+
+app.listen(port, () => {
+    console.log("listenning on", process.env.MOVIES_DB_HOST, process.env.INVENTORY_PORT);
 });

@@ -36,6 +36,7 @@ Vagrant.configure("2") do |config|
   # `vagrant box outdated`. This is not recommended.
   # config.vm.box_check_update = false
 
+  config.vm.synced_folder "./src/inventory-app", "/home/vagrant/app"
   config.vm.define "api-gateway" do |api_gateway|
     api_gateway.vm.hostname = "api-gateway"
     api_gateway.vm.network "private_network", ip: SERVICES['api-gateway'][:ip]
@@ -43,7 +44,28 @@ Vagrant.configure("2") do |config|
       api_gateway.vm.network "forwarded_port", guest: guest_port, host: host_port
     end
   end
-  # end
+
+  config.vm.define "billing-app" do |billing_app|
+    billing_app.vm.hostname = "billing-app"
+    billing_app.vm.network "private_network", ip: SERVICES['billing-app'][:ip]
+    SERVICES['billing-app'][:ports].each do |guest_port, host_port|
+      billing_app.vm.network "forwarded_port", guest: guest_port, host: host_port
+    end
+
+     # Add shell provisioner
+    billing_app.vm.provision "shell", path: "src/scripts/install_billing.sh",
+
+    env: {
+      "ORDERS_DB_USER" => ENV["ORDERS_DB_USER"],
+      "ORDERS_DB_PASSWORD" => ENV["ORDERS_DB_PASSWORD"],
+      "ORDERS_DB_HOST" => ENV["ORDERS_DB_HOST"],
+      "ORDERS_DB_NAME" => ENV["ORDERS_DB_NAME"],
+      "ORDERS_DB_PORT" => ENV["ORDERS_DB_PORT"],
+      "BILLING_PORT" => ENV["BILLING_PORT"],
+    }
+
+   
+  end
 
   config.vm.define "inventory-app" do |inventory_app|
   inventory_app.vm.hostname = "inventory-app"
@@ -53,31 +75,20 @@ Vagrant.configure("2") do |config|
     inventory_app.vm.network "forwarded_port", guest: guest_port, host: host_port
   end
 
-  # Add shell provisioner
-  inventory_app.vm.provision "shell", inline: <<-SHELL
-    # Update system
-    sudo apt-get update -y
+    # Add shell provisioner
+  inventory_app.vm.provision "shell", path: "src/scripts/install_inventory.sh",
 
-    # Install dependencies
-    sudo apt-get install -y curl gnupg build-essential
+  env: {
+    "MOVIES_DB_HOST" => ENV["MOVIES_DB_HOST"],
+    "MOVIES_DB_NAME" => ENV["MOVIES_DB_NAME"],
+    "MOVIES_DB_USER" => ENV["MOVIES_DB_USER"],
+    "MOVIES_DB_PASSWORD" => ENV["MOVIES_DB_PASSWORD"],
+    "MOVIES_DB_PORT" => ENV["MOVIES_DB_PORT"],
+    "INVENTORY_PORT" => ENV["INVENTORY_PORT"],
+  }
 
-    # Install Node.js (latest LTS)
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-    sudo apt-get install -y nodejs
 
-    # Install PM2 globally
-    sudo npm install -g pm2
-
-    # Install PostgreSQL
-    sudo apt-get install -y postgresql postgresql-contrib
-
-    # Start PostgreSQL service and enable on boot
-    sudo systemctl enable postgresql
-    sudo systemctl start postgresql
-  SHELL
 end
-
-
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
