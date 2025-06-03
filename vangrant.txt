@@ -39,7 +39,6 @@ Vagrant.configure("2") do |config|
   print "ORDERS_DB_USER: #{ENV['ORDERS_DB_USER']}\n"
   print "MOVIES_HOST: #{ENV['MOVIES_DB_HOST']}\n"
   print "MOVIES_DB_NAME: #{ENV['MOVIES_DB_NAME']}\n"
-  print "INVENTORY_PORT: #{ENV['INVENTORY_PORT']}\n"
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
@@ -75,7 +74,6 @@ Vagrant.configure("2") do |config|
       "ORDERS_DB_NAME" => ENV["ORDERS_DB_NAME"],
       "ORDERS_DB_PORT" => ENV["ORDERS_DB_PORT"],
       "BILLING_PORT" => ENV["BILLING_PORT"],
-      "ORDERS_HOST" => ENV["ORDERS_HOST"],
     }
 
 
@@ -100,7 +98,6 @@ Vagrant.configure("2") do |config|
       "MOVIES_DB_PASSWORD" => ENV['MOVIES_DB_PASSWORD'],
       "MOVIES_DB_PORT" => ENV['MOVIES_DB_PORT'],
       "INVENTORY_PORT" => ENV['INVENTORY_PORT'],
-      "MOVIES_HOST" => ENV['MOVIES_HOST'],
     }
 
 

@@ -25,7 +25,7 @@ const getMoviesbyTitle = (request, response) => {
     return response.status(400).json({ error: 'Missing "title" query parameter' });
   }
     console.log('Title:', title)
-    pool.query('SELECT * FROM movies WHERE title = $1', [title], (error, results) => {
+    pool.query(`SELECT * FROM ${process.env.MOVIES_TABLE} WHERE title = $1`, [title], (error, results) => {
     if (error) {
       throw error
     }
@@ -44,7 +44,7 @@ const getMoviesbyTitle = (request, response) => {
 const createMovie = (request, response) => {
     const { title, description } = request.body
     pool.query(
-        'INSERT INTO movies (title, description) VALUES ($1, $2) RETURNING *',
+        `INSERT INTO ${process.env.MOVIES_TABLE} (title, description) VALUES ($1, $2) RETURNING *`,
         [title, description],
         (error, results) => {
             if (error) {
@@ -62,7 +62,7 @@ const getMoviebyId = (request, response) => {
   const id = parseInt(request.params.id)
   console.log(id)
   console.log(request.params.id)
-  pool.query('SELECT * FROM movies WHERE id = $1', [id], (error, results) => {
+  pool.query(`SELECT * FROM ${process.env.MOVIES_TABLE} WHERE id = $1`, [id], (error, results) => {
     if (error) {
       throw error
     }
@@ -73,7 +73,7 @@ const getMoviebyId = (request, response) => {
 const deleteMovie = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('DELETE FROM movies WHERE id = $1', [id], (error, results) => {
+  pool.query(`DELETE FROM ${process.env.MOVIES_TABLE} WHERE id = $1`, [id], (error, results) => {
     if (error) {
       throw error
     }
@@ -82,7 +82,7 @@ const deleteMovie = (request, response) => {
 }
 
 const deleteAllMovies = (request, response) => {
-    pool.query('DELETE FROM movies', (error, results) => {
+    pool.query(`DELETE FROM ${process.env.MOVIES_TABLE}`, (error, results) => {
         if (error) {
             response.status(500).json({error: error.message})
             return
@@ -100,7 +100,7 @@ const updateMovie = (request, response) => {
   const { title, description } = request.body
 
   pool.query(
-    'UPDATE movies SET title = $1, description = $2 WHERE id = $3',
+    `UPDATE ${process.env.MOVIES_TABLE} SET title = $1, description = $2 WHERE id = $3`,
     [title, description, id],
     (error, results) => {
       if (error) {

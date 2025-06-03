@@ -1,5 +1,19 @@
 #!/bin/bash
 
+echo "Installing Inventory App..."
+echo $MOVIES_DB_HOST
+
+echo "export MOVIES_DB_HOST=${MOVIES_DB_HOST}" >> /home/vagrant/.bashrc
+echo "export MOVIES_DB_NAME=${MOVIES_DB_NAME}" >> /home/vagrant/.bashrc
+echo "export MOVIES_DB_USER=${MOVIES_DB_USER}" >> /home/vagrant/.bashrc
+echo "export MOVIES_DB_PASSWORD=${MOVIES_DB_PASSWORD}" >> /home/vagrant/.bashrc
+echo "export MOVIES_DB_PORT=${MOVIES_DB_PORT}" >> /home/vagrant/.bashrc
+echo "export INVENTORY_PORT=${INVENTORY_PORT}" >> /home/vagrant/.bashrc
+echo "export MOVIES_HOST=${MOVIES_HOST}" >> /home/vagrant/.bashrc
+echo "export MOVIES_TABLE=${MOVIES_TABLE}" >> /home/vagrant/.bashrc
+
+source ~/.bashrc
+
 # Update system
 sudo apt-get update -y
 
@@ -17,18 +31,20 @@ sudo npm install -g pm2
 sudo apt-get install -y postgresql postgresql-contrib
 
  # Create the 'vagrant' PostgreSQL role with superuser privileges
-  sudo -u postgres createuser --superuser vagrant
+  sudo -u postgres createuser --superuser $MOVIES_DB_USER
  
-  sudo -u postgres psql -c "ALTER USER vagrant WITH PASSWORD 'vagrant';"
+  sudo -u postgres psql -c "ALTER USER vagrant WITH PASSWORD '$MOVIES_DB_PASSWORD';"
 
-  sudo -u postgres createdb -O vagrant movies_db
+  sudo -u postgres createdb -O $MOVIES_DB_USER $MOVIES_DB_NAME
+
+  
 
 # Start PostgreSQL service and enable on boot
 sudo systemctl enable postgresql
 sudo systemctl start postgresql
 
 # Create the movies table in movies_db as the postgres user
-sudo -u postgres psql movies_db <<EOF
+sudo -u postgres psql $MOVIES_DB_NAME <<EOF
 CREATE TABLE movies (
   id SERIAL PRIMARY KEY,
   title VARCHAR(255),
@@ -49,5 +65,17 @@ cd /home/vagrant/app
 sudo -u vagrant npm install
 
 # Start the app with PM2
-sudo -u vagrant pm2 start server.js --name movies-server
+sudo -u vagrant \
+  MOVIES_DB_HOST=$MOVIES_DB_HOST \
+  MOVIES_DB_NAME=$MOVIES_DB_NAME \
+  MOVIES_DB_USER=$MOVIES_DB_USER \
+  MOVIES_DB_PASSWORD=$MOVIES_DB_PASSWORD \
+  MOVIES_DB_PORT=$MOVIES_DB_PORT \
+  INVENTORY_PORT=$INVENTORY_PORT \
+  MOVIES_HOST=$MOVIES_HOST \
+  MOVIES_TABLE=$MOVIES_TABLE \
+  pm2 start server.js --name movies-server 
+  
+
+
 sudo -u vagrant pm2 save

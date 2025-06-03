@@ -3,6 +3,15 @@ require('dotenv').config();
 const app = express();
 const db = require('./queries.js');
 
+console.table({
+    MOVIES_DB_USER: process.env.MOVIES_DB_USER,
+    MOVIES_DB_HOST: process.env.MOVIES_DB_HOST,
+    MOVIES_DB_NAME: process.env.MOVIES_DB_NAME,
+    MOVIES_DB_PASSWORD: process.env.MOVIES_DB_PASSWORD,
+    MOVIES_DB_PORT: process.env.MOVIES_DB_PORT,
+    INVENTORY_PORT: process.env.INVENTORY_PORT
+});
+
 // make the server to parse json data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -44,5 +53,5 @@ app.put('/api/movies/:id', (req, res) =>{
 const port = process.env.INVENTORY_PORT;
 
 app.listen(port, () => {
-    console.log("listenning on", process.env.MOVIES_DB_HOST, process.env.INVENTORY_PORT);
+    console.log("listenning on", process.env.MOVIES_HOST, process.env.INVENTORY_PORT);
 });

@@ -1,18 +1,19 @@
 var amqp = require('amqplib');
+require('dotenv').config();
 
 const Pool = require('pg').Pool
 const pool = new Pool({
-    user: 'kendi',
-    host: 'localhost',
-    database: 'movies_db',
-    password: 'kendi',
-    port: 5432,
+    user: process.env.ORDERS_DB_USER,
+    host: process.env.ORDERS_DB_HOST,
+    database: process.env.ORDERS_DB_NAME,
+    password: process.env.ORDERS_DB_PASSWORD,
+    port: process.env.ORDERS_DB_PORT,
 })
 
-const QUEUE = "billing_queue";
+const QUEUE = process.env.BILLING_QUEUE;
 
 async function startConsumer() {
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://${process.env.RABBITMQ_HOST}');
     const channel = await connection.createChannel();
     await channel.assertQueue(QUEUE, { durable: true });
 
@@ -23,8 +24,8 @@ async function startConsumer() {
 
         
             pool.query(
-        `INSERT INTO movies (title, description) VALUES ($1, $2) RETURNING *`,
-                [billingData.title, billingData.description],
+        `INSERT INTO ${process.env.ORDERS_TABLE} (user_id,number_of_items, total_amount) VALUES ($1, $2, $3) RETURNING *`,
+                [billingData.user_id, billingData.number_of_items, billingData.total_amount],  
         (error, results) => {
              if (error) {
                     console.error('Database insertion error:', error.message);

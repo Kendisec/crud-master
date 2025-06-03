@@ -1,8 +1,10 @@
 const express = require('express');
 const amqp = require('amqplib');
+require('dotenv').config();
+
 
 const app = express();
-const QUEUE = 'billing_queue';
+const QUEUE = process.env.BILLING_QUEUE;;
 let channel;
 
 app.use(express.json()); // ✅ Make sure JSON body is parsed
@@ -17,7 +19,7 @@ const getBilling = (request, response) => {
 }
 
 async function connectRabbitMQ() {
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://${process.env.RABBITMQ_HOST}');
     channel = await connection.createChannel();
     await channel.assertQueue(QUEUE, { durable: true });
     console.log(`Connected to RabbitMQ and listening on queue: ${QUEUE}`);
@@ -43,8 +45,8 @@ app.post('/api/billing', async (req, res) => {
 app.get('/api/billing', getBilling);
 
 connectRabbitMQ().then(() => {
-    app.listen(3000, () => {
-        console.log('API Server running on http://localhost:3000');
+    app.listen(process.env.BILLING_PORT, () => {
+        console.log('API Server is running on port', process.env.BILLING_PORT);
     });
 }).catch(err => {
     console.error('Failed to connect to RabbitMQ', err);
